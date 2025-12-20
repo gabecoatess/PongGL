@@ -6,7 +6,6 @@ find_package(OpenGL REQUIRED)
 
 add_subdirectory(external/glfw-3.4)
 
-#include_directories(SYSTEM external/glad-4.1/include)
 add_library(glad STATIC external/glad-4.1/src/glad.c)
 target_include_directories(glad PUBLIC external/glad-4.1/include)
 
