@@ -74,7 +74,8 @@ int main()
     GLuint vbo = 0;
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), points, GL_STATIC_DRAW);
+
+    glBufferData(GL_ARRAY_BUFFER, (sizeof(points) / sizeof(float)) * sizeof(float), points, GL_STATIC_DRAW);
 
     GLuint vao = 0;
     glGenVertexArrays(1, &vao);
