@@ -43,6 +43,20 @@ GLuint LoadShader(std::string vertexPath, std::string fragPath)
     glAttachShader(shaderProgram, fragmentShader);
     glLinkProgram(shaderProgram);
 
+    // Check shader program compilation
+    int shaderProgramSuccess;
+    char infoLog[512];
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &shaderProgramSuccess);
+    if (!shaderProgramSuccess)
+    {
+        glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
+        std::cerr << "Shader program failed with error: '" << infoLog << "'! Please fix errors before continuing\n";
+    }
+
+    // Delete shaders
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
     return shaderProgram;
 }
 
