@@ -85,7 +85,9 @@ int main()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
     // Define shaders
-    const GLuint mainShader = LoadShader("../vertShader.glsl", "../fragShader.glsl");
+    const GLuint mainShader = LoadShader(
+        "../assets/shaders/vertShader.glsl",
+        "../assets/shaders/fragShader.glsl");
 
     // Loop
     while (!glfwWindowShouldClose(window))
