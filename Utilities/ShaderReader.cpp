@@ -52,5 +52,16 @@ GLuint CreateShaderFromSource(const int shaderType, const char* shaderSource)
     glShaderSource(shader, 1, &shaderSource, nullptr);
     glCompileShader(shader);
 
+    // Check for errors
+    int compileSuccess;
+    char infoLog[512];
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &compileSuccess);
+
+    if (!compileSuccess)
+    {
+        glGetShaderInfoLog(shader, 512, nullptr, infoLog);
+        std::cerr << "Shader compilation failed with error: '" << infoLog << "'! Please fix errors before continuing\n";
+    }
+
     return shader;
 }
