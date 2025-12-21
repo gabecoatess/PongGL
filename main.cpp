@@ -1,6 +1,10 @@
+#include <fstream>
 #include <iostream>
+#include <sstream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
+#include "Utilities/ShaderReader.h"
 
 void GlfwErrorCallback(int errorNum, const char* errorDesc)
 {
@@ -80,39 +84,14 @@ int main()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
     // Define shaders
-    const char* vertexShaderSource =
-        "#version 410 core\n"
-        "in vec3 vp;"
-        "void main() {"
-        "   gl_Position = vec4(vp, 1.0);"
-        "}";
-
-    const char* fragmentShaderSource =
-        "#version 410 core\n"
-        "out vec4 fragColor;"
-        "void main() {"
-        "   fragColor = vec4(0.5, 0.0, 0.5, 1.0);"
-        "}";
-
-    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
-    glCompileShader(vertexShader);
-
-    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, nullptr);
-    glCompileShader(fragmentShader);
-
-    GLuint shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, fragmentShader);
-    glAttachShader(shaderProgram, vertexShader);
-    glLinkProgram(shaderProgram);
+    const GLuint mainShader = LoadShader("../vertShader.glsl", "../fragShader.glsl");
 
     // Loop
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glUseProgram(shaderProgram);
+        glUseProgram(mainShader);
         glBindVertexArray(vao);
 
         glDrawArrays(GL_TRIANGLES, 0, 3);
