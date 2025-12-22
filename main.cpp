@@ -65,9 +65,15 @@ int main()
     // Set window clear color to red
     glClearColor(0, 0, 0, 0);
 
-    // Start with triangle
+    // Load triangle mesh data
     rapidobj::Result triangleMeshResult = rapidobj::ParseFile("../assets/models/triangle.obj");
+    std::vector<unsigned int> indices;
+    for (int i = 0; i < triangleMeshResult.shapes[0].mesh.indices.size(); i++)
+    {
+        indices.push_back(triangleMeshResult.shapes[0].mesh.indices[i].position_index);
+    }
 
+    // Create Vertex Buffer Object
     GLuint vbo = 0;
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -78,6 +84,18 @@ int main()
         triangleMeshResult.attributes.positions.begin(),
         GL_STATIC_DRAW);
 
+    // Create Element Buffer Object
+    GLuint ebo;
+    glGenBuffers(1, &ebo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+
+    glBufferData(
+        GL_ELEMENT_ARRAY_BUFFER,
+        indices.size() * sizeof(int),
+        indices.data(),
+        GL_STATIC_DRAW);
+
+    // Create Vertex Array Object
     GLuint vao = 0;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
@@ -90,15 +108,19 @@ int main()
         "../assets/shaders/vertShader.glsl",
         "../assets/shaders/fragShader.glsl");
 
+    glPolygonMode(GL_FRONT, GL_FILL);
     // Loop
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(mainShader);
-        glBindVertexArray(vao);
+        // glBindVertexArray(vao);
+        //
+        // glDrawArrays(GL_TRIANGLES, 0, 3);
 
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+        glDrawElements(GL_TRIANGLES, triangleMeshResult.shapes[0].mesh.indices.size(), GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(window);
 
