@@ -1,16 +1,7 @@
-#include <fstream>
-#include <iostream>
-#include <sstream>
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "external/rapidobj/rapidobj.h"
 #include "Utilities/Application.hpp"
-#include "Utilities/Model.hpp"
 #include "Utilities/Renderer.hpp"
-#include "Utilities/ShaderReader.h"
-
-
 
 int main()
 {
