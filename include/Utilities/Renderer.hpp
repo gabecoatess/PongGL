@@ -27,8 +27,8 @@ public:
         glPolygonMode(GL_FRONT, GL_FILL);
 
         mainShader = LoadShader(
-            "../assets/shaders/vertShader.glsl",
-            "../assets/shaders/fragShader.glsl");
+            "./assets/shaders/vertShader.glsl",
+            "./assets/shaders/fragShader.glsl");
 
         currentWindow = app.GetActiveWindow();
     }

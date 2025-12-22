@@ -17,3 +17,8 @@ add_executable(PongGL main.cpp
 
 target_include_directories(PongGL PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(PongGL PRIVATE glad OpenGL::GL glfw)
+
+add_custom_command(TARGET PongGL POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory
+                   ${CMAKE_CURRENT_SOURCE_DIR}/assets
+                   ${CMAKE_CURRENT_BINARY_DIR}/assets)

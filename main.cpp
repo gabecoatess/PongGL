@@ -19,8 +19,8 @@ int main()
     Renderer renderer(app);
 
     // Load meshes into renderer
-    renderer.AddModel("../assets/models/pong_title.obj");
-    renderer.AddModel("../assets/models/triangle.obj");
+    renderer.AddModel("./assets/models/pong_title.obj");
+    renderer.AddModel("./assets/models/triangle.obj");
 
     while (app.Active())
     {
