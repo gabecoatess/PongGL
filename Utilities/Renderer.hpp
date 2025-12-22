@@ -2,6 +2,7 @@
 #define RENDERER_HPP
 #include <vector>
 
+#include "Application.hpp"
 #include "Model.hpp"
 #include "ShaderReader.h"
 #include "GLFW/glfw3.h"
@@ -11,12 +12,13 @@ private:
     std::vector<Model> activeModels;
     GLuint vertexArray = 0;
     GLuint mainShader;
+    Application& app;
     GLFWwindow* currentWindow;
 
     const int maxModels = 1000;
 
 public:
-    Renderer(GLFWwindow* window) : currentWindow(window)
+    Renderer(Application& _app) : app(_app)
     {
         activeModels.reserve(sizeof(Model) * maxModels);
 
@@ -28,6 +30,8 @@ public:
         mainShader = LoadShader(
             "../assets/shaders/vertShader.glsl",
             "../assets/shaders/fragShader.glsl");
+
+        currentWindow = app.GetActiveWindow();
     }
 
     void RenderScene() const;

@@ -1,7 +1,5 @@
 #include "Renderer.hpp"
 
-#include "GLFW/glfw3.h"
-
 void Renderer::RenderScene() const
 {
     glClear(GL_COLOR_BUFFER_BIT);

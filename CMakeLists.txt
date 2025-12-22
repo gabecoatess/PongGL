@@ -16,6 +16,8 @@ add_executable(PongGL main.cpp
         Utilities/Model.cpp
         Utilities/Model.hpp
         Utilities/Renderer.cpp
-        Utilities/Renderer.hpp)
+        Utilities/Renderer.hpp
+        Utilities/Application.cpp
+        Utilities/Application.hpp)
 
 target_link_libraries(PongGL PRIVATE glad OpenGL::GL glfw)
