@@ -22,6 +22,9 @@ void Application::Preload()
 
     primaryMonitor = glfwGetPrimaryMonitor();
     videoMode = glfwGetVideoMode(primaryMonitor);
+
+    std::cout << "Preload complete\n";
+    std::cout << "[Primary Monitor: " << glfwGetMonitorName(primaryMonitor) << "]\n";
 }
 
 bool Application::Preloaded() const
@@ -36,6 +39,8 @@ bool Application::Started() const
 
 void Application::Start()
 {
+    std::cout << "Application start requested...\n";
+
     // Configurables
     glfwWindowHint(GLFW_RESIZABLE, windowResizable);
     glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, openGLMajor);
@@ -84,6 +89,7 @@ void Application::Start()
     gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
 
     startSuccess = true;
+    std::cout << "Ready!\n";
 }
 
 void Application::DefineApplicationTitle(const std::string title)
