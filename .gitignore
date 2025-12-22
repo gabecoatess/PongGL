@@ -3,3 +3,5 @@ cmake-build-debug
 .idea/workspace.xml
 .idea/usage.statistics.xml
 .idea/shelf
+build
+.DS_Store
