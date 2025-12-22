@@ -33,6 +33,10 @@ GLuint LoadShader(std::string vertexPath, std::string fragPath)
     std::string vertexSource = vertexFileStream.str();
     std::string fragmentSource = fragmentFileStream.str();
 
+    // Close file handles
+    vertexShaderFile.close();
+    fragmentShaderFile.close();
+
     // Create shaders
     GLuint vertexShader = CreateShaderFromSource(GL_VERTEX_SHADER, vertexSource.c_str());
     GLuint fragmentShader = CreateShaderFromSource(GL_FRAGMENT_SHADER, fragmentSource.c_str());
