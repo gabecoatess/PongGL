@@ -14,6 +14,8 @@ add_executable(PongGL main.cpp
         Utilities/ShaderReader.h
         external/rapidobj/rapidobj.h
         Utilities/Model.cpp
-        Utilities/Model.hpp)
+        Utilities/Model.hpp
+        Utilities/Renderer.cpp
+        Utilities/Renderer.hpp)
 
 target_link_libraries(PongGL PRIVATE glad OpenGL::GL glfw)

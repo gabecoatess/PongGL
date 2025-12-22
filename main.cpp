@@ -6,6 +6,7 @@
 
 #include "external/rapidobj/rapidobj.h"
 #include "Utilities/Model.hpp"
+#include "Utilities/Renderer.hpp"
 #include "Utilities/ShaderReader.h"
 
 void GlfwErrorCallback(int errorNum, const char* errorDesc)
@@ -61,42 +62,19 @@ int main()
     glfwMakeContextCurrent(window);
     gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
 
-    // Set window clear color to red
-    glClearColor(0, 0, 0, 0);
+    // Create the renderer
+    Renderer renderer(window);
 
-    // Create Vertex Array Object
-    GLuint vao = 0;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-    glEnableVertexAttribArray(0);
+    // Load meshes into renderer
+    renderer.AddModel("../assets/models/pong_title.obj");
+    renderer.AddModel("../assets/models/triangle.obj");
 
-    // Load triangle mesh data
-    const Model pongTitleModel = Model("../assets/models/pong_title.obj");
-    const Model triangleModel = Model("../assets/models/triangle.obj");
-
-    // Define shaders
-    const GLuint mainShader = LoadShader(
-        "../assets/shaders/vertShader.glsl",
-        "../assets/shaders/fragShader.glsl");
-
-    glPolygonMode(GL_FRONT, GL_FILL);
-    // Loop
     while (!glfwWindowShouldClose(window))
     {
-        glClear(GL_COLOR_BUFFER_BIT);
-        glUseProgram(mainShader);
-
-        glBindVertexArray(vao);
-
-        triangleModel.RenderModel();
-        pongTitleModel.RenderModel();
-
-        glfwSwapBuffers(window);
+        renderer.RenderScene();
         glfwPollEvents();
     }
 
-    // Terminate
     glfwTerminate();
 
     return 0;
