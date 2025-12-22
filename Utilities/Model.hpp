@@ -2,6 +2,7 @@
 #define MODEL_HPP
 
 #include <filesystem>
+#include <glad/glad.h>
 
 #include "../external/rapidobj/rapidobj.h"
 
@@ -12,6 +13,9 @@ public:
 private:
     std::vector<float> modelVertices;
     std::vector<unsigned int> modelIndices;
+
+    GLuint vertexBuffer = 0;
+    GLuint elementBuffer = 0;
 
     rapidobj::Result meshData;
 
@@ -32,6 +36,10 @@ public:
         {
             modelIndices.push_back(meshData.shapes[0].mesh.indices[i].position_index);
         }
+
+        // Prepare model
+        GenerateBuffer(GL_ARRAY_BUFFER);
+        GenerateBuffer(GL_ELEMENT_ARRAY_BUFFER);
     }
 
     int GetTotalVertices() const;
@@ -42,6 +50,12 @@ public:
 
     const void* GetVertexData() const;
     const void* GetIndexData() const;
+
+    GLuint GetVertexBufferObject() const;
+    GLuint GetElementBufferObject() const;
+
+private:
+    void GenerateBuffer(int bufferType);
 };
 
 #endif //MODEL_HPP

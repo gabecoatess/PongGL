@@ -69,34 +69,12 @@ int main()
     // Load triangle mesh data
     const Model triangleModel = Model("../assets/models/triangle.obj");
 
-    // Create Vertex Buffer Object
-    GLuint vbo = 0;
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
-    glBufferData(
-        GL_ARRAY_BUFFER,
-        triangleModel.GetTotalVerticesSize(),
-        triangleModel.GetVertexData(),
-        GL_STATIC_DRAW);
-
-    // Create Element Buffer Object
-    GLuint ebo;
-    glGenBuffers(1, &ebo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-
-    glBufferData(
-        GL_ELEMENT_ARRAY_BUFFER,
-        triangleModel.GetTotalIndicesSize(),
-        triangleModel.GetIndexData(),
-        GL_STATIC_DRAW);
-
     // Create Vertex Array Object
     GLuint vao = 0;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
     glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, triangleModel.GetVertexBufferObject());
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
     // Define shaders
@@ -112,7 +90,7 @@ int main()
 
         glUseProgram(mainShader);
 
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangleModel.GetElementBufferObject());
         glDrawElements(GL_TRIANGLES, triangleModel.GetTotalIndices(), GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(window);
