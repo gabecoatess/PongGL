@@ -10,14 +10,10 @@ add_library(glad STATIC external/glad-4.1/src/glad.c)
 target_include_directories(glad PUBLIC external/glad-4.1/include)
 
 add_executable(PongGL main.cpp
-        Utilities/ShaderReader.cpp
-        Utilities/ShaderReader.h
-        external/rapidobj/rapidobj.h
-        Utilities/Model.cpp
-        Utilities/Model.hpp
-        Utilities/Renderer.cpp
-        Utilities/Renderer.hpp
-        Utilities/Application.cpp
-        Utilities/Application.hpp)
+        src/Utilities/ShaderReader.cpp
+        src/Utilities/Model.cpp
+        src/Utilities/Renderer.cpp
+        src/Utilities/Application.cpp)
 
+target_include_directories(PongGL PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(PongGL PRIVATE glad OpenGL::GL glfw)

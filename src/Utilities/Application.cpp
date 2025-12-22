@@ -1,6 +1,7 @@
-#include "Application.hpp"
+#include "Utilities/Application.hpp"
 
 #include <iostream>
+#include <glad/glad.h>
 
 void GlfwErrorCallback(int errorNum, const char* errorDesc)
 {

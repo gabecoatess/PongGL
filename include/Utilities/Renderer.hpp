@@ -4,8 +4,7 @@
 
 #include "Application.hpp"
 #include "Model.hpp"
-#include "ShaderReader.h"
-#include "GLFW/glfw3.h"
+#include "Utilities/ShaderReader.hpp"
 
 class Renderer {
 private:
