@@ -4,6 +4,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "external/rapidobj/rapidobj.h"
 #include "Utilities/ShaderReader.h"
 
 void GlfwErrorCallback(int errorNum, const char* errorDesc)
@@ -65,17 +66,17 @@ int main()
     glClearColor(0, 0, 0, 0);
 
     // Start with triangle
-    float points[] = {
-        0.0f,  0.5f,  0.0f, // x,y,z of first point.
-        0.5f, -0.5f,  0.0f, // x,y,z of second point.
-       -0.5f, -0.5f,  0.0f  // x,y,z of third point.
-     };
+    rapidobj::Result triangleMeshResult = rapidobj::ParseFile("../assets/models/triangle.obj");
 
     GLuint vbo = 0;
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-    glBufferData(GL_ARRAY_BUFFER, (sizeof(points) / sizeof(float)) * sizeof(float), points, GL_STATIC_DRAW);
+    glBufferData(
+        GL_ARRAY_BUFFER,
+        triangleMeshResult.attributes.positions.size() * sizeof(float),
+        triangleMeshResult.attributes.positions.begin(),
+        GL_STATIC_DRAW);
 
     GLuint vao = 0;
     glGenVertexArrays(1, &vao);

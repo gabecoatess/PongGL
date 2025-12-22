@@ -11,6 +11,7 @@ target_include_directories(glad PUBLIC external/glad-4.1/include)
 
 add_executable(PongGL main.cpp
         Utilities/ShaderReader.cpp
-        Utilities/ShaderReader.h)
+        Utilities/ShaderReader.h
+        external/rapidobj/rapidobj.h)
 
 target_link_libraries(PongGL PRIVATE glad OpenGL::GL glfw)
