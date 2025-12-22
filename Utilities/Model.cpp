@@ -42,6 +42,34 @@ GLuint Model::GetElementBufferObject() const
     return elementBuffer;
 }
 
+void Model::BindBuffers() const
+{
+    // Validate the buffers are generated
+    if (!vertexBufferGenerated)
+    {
+        std::cerr << "Trying to bind a vertex buffer but it has not been generated!\n";
+    }
+
+    if (!elementBufferGenerated)
+    {
+        std::cerr << "Trying to bind a element buffer but it has not been generated!\n";
+    }
+
+    // Bind VBO first
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+
+    // Bind EBO second
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBuffer);
+}
+
+void Model::RenderModel() const
+{
+    BindBuffers();
+    glDrawElements(GL_TRIANGLES, GetTotalIndices(), GL_UNSIGNED_INT, 0);
+}
+
+
 void Model::GenerateBuffer(int bufferType)
 {
     switch(bufferType)
@@ -55,6 +83,8 @@ void Model::GenerateBuffer(int bufferType)
             // Populate active with data
             glBufferData(GL_ARRAY_BUFFER, GetTotalVerticesSize(), GetVertexData(), GL_STATIC_DRAW);
 
+            vertexBufferGenerated = true;
+
             break;
 
         case GL_ELEMENT_ARRAY_BUFFER:
@@ -65,6 +95,8 @@ void Model::GenerateBuffer(int bufferType)
 
             // Populate active with data
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, GetTotalIndicesSize(), GetIndexData(), GL_STATIC_DRAW);
+
+            elementBufferGenerated = true;
 
             break;
 

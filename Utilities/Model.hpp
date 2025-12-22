@@ -17,6 +17,9 @@ private:
     GLuint vertexBuffer = 0;
     GLuint elementBuffer = 0;
 
+    bool vertexBufferGenerated = false;
+    bool elementBufferGenerated = false;
+
     rapidobj::Result meshData;
 
 public:
@@ -53,6 +56,9 @@ public:
 
     GLuint GetVertexBufferObject() const;
     GLuint GetElementBufferObject() const;
+
+    void BindBuffers() const;
+    void RenderModel() const;
 
 private:
     void GenerateBuffer(int bufferType);

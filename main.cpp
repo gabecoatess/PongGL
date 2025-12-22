@@ -28,8 +28,6 @@ int main()
     GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
     const GLFWvidmode* videoMode = glfwGetVideoMode(primaryMonitor);
 
-    std::cout << "(" << videoMode->width << ", " << videoMode->height << ")\n";
-
     int windowWidth = 640;
     int windowHeight = 480;
 
@@ -66,16 +64,16 @@ int main()
     // Set window clear color to red
     glClearColor(0, 0, 0, 0);
 
-    // Load triangle mesh data
-    const Model triangleModel = Model("../assets/models/triangle.obj");
-
     // Create Vertex Array Object
     GLuint vao = 0;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, triangleModel.GetVertexBufferObject());
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(0);
+
+    // Load triangle mesh data
+    const Model pongTitleModel = Model("../assets/models/pong_title.obj");
+    const Model triangleModel = Model("../assets/models/triangle.obj");
 
     // Define shaders
     const GLuint mainShader = LoadShader(
@@ -87,14 +85,14 @@ int main()
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT);
-
         glUseProgram(mainShader);
 
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangleModel.GetElementBufferObject());
-        glDrawElements(GL_TRIANGLES, triangleModel.GetTotalIndices(), GL_UNSIGNED_INT, 0);
+        glBindVertexArray(vao);
+
+        triangleModel.RenderModel();
+        pongTitleModel.RenderModel();
 
         glfwSwapBuffers(window);
-
         glfwPollEvents();
     }
 
