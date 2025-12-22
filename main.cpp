@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 
 #include "external/rapidobj/rapidobj.h"
+#include "Utilities/Model.hpp"
 #include "Utilities/ShaderReader.h"
 
 void GlfwErrorCallback(int errorNum, const char* errorDesc)
@@ -66,12 +67,7 @@ int main()
     glClearColor(0, 0, 0, 0);
 
     // Load triangle mesh data
-    rapidobj::Result triangleMeshResult = rapidobj::ParseFile("../assets/models/triangle.obj");
-    std::vector<unsigned int> indices;
-    for (int i = 0; i < triangleMeshResult.shapes[0].mesh.indices.size(); i++)
-    {
-        indices.push_back(triangleMeshResult.shapes[0].mesh.indices[i].position_index);
-    }
+    const Model triangleModel = Model("../assets/models/triangle.obj");
 
     // Create Vertex Buffer Object
     GLuint vbo = 0;
@@ -80,8 +76,8 @@ int main()
 
     glBufferData(
         GL_ARRAY_BUFFER,
-        triangleMeshResult.attributes.positions.size() * sizeof(float),
-        triangleMeshResult.attributes.positions.begin(),
+        triangleModel.GetTotalVerticesSize(),
+        triangleModel.GetVertexData(),
         GL_STATIC_DRAW);
 
     // Create Element Buffer Object
@@ -91,8 +87,8 @@ int main()
 
     glBufferData(
         GL_ELEMENT_ARRAY_BUFFER,
-        indices.size() * sizeof(int),
-        indices.data(),
+        triangleModel.GetTotalIndicesSize(),
+        triangleModel.GetIndexData(),
         GL_STATIC_DRAW);
 
     // Create Vertex Array Object
@@ -115,12 +111,9 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(mainShader);
-        // glBindVertexArray(vao);
-        //
-        // glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-        glDrawElements(GL_TRIANGLES, triangleMeshResult.shapes[0].mesh.indices.size(), GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, triangleModel.GetTotalIndices(), GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(window);
 
