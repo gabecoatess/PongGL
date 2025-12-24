@@ -14,6 +14,8 @@ private:
     Application& app;
     GLFWwindow* currentWindow;
 
+    GLuint transformLocation;
+
     const int maxModels = 1000;
 
 public:
@@ -26,7 +28,7 @@ public:
         glClearColor(0, 0, 0, 0);
         glPolygonMode(GL_FRONT, GL_FILL);
 
-        mainShader = LoadShader(
+        InitializeShaders(
             "./assets/shaders/vertShader.glsl",
             "./assets/shaders/fragShader.glsl");
 
@@ -38,6 +40,8 @@ public:
 
 private:
     void CreateVertexArray();
+    void InitializeShaders(const std::string& primaryVertexShaderPath, const std::string& primaryFragmentShaderPath );
+    void PassShaderData() const;
 };
 
 #endif //RENDERER_HPP
