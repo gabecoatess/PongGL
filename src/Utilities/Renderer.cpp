@@ -9,6 +9,8 @@ void Renderer::RenderScene() const
     glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(mainShader);
 
+    PassShaderData();
+
     for (const auto& model : activeModels)
     {
         model.RenderModel();
@@ -35,13 +37,15 @@ void Renderer::CreateVertexArray()
     glEnableVertexAttribArray(0);
 }
 
+void Renderer::InitializeMatrices()
+{
+    viewMatrix = glm::translate(viewMatrix, glm::vec3(0.0f, 0.0f, -3.0f));
+    projectionMatrix = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+}
+
 void Renderer::InitializeShaders(const std::string& primaryVertexShaderPath, const std::string& primaryFragmentShaderPath)
 {
     mainShader = LoadShader(primaryVertexShaderPath, primaryFragmentShaderPath);
-
-    // glm::mat4 trans = glm::mat4(1.0f);
-    // trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
-    // trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
 
     // glUseProgram(mainShader);
     transformLocation = glGetUniformLocation(mainShader, "transform");
@@ -50,5 +54,7 @@ void Renderer::InitializeShaders(const std::string& primaryVertexShaderPath, con
 
 void Renderer::PassShaderData() const
 {
-
+    glm::mat4 modelMatrix = glm::mat4(1.0f);
+    modelMatrix = glm::rotate(modelMatrix, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+    glUniformMatrix4fv(transformLocation, 1, GL_FALSE, glm::value_ptr(projectionMatrix * viewMatrix * modelMatrix));
 }

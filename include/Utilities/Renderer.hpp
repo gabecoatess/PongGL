@@ -1,6 +1,9 @@
 #ifndef RENDERER_HPP
 #define RENDERER_HPP
 #include <vector>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "Application.hpp"
 #include "Model.hpp"
@@ -16,6 +19,9 @@ private:
 
     GLuint transformLocation;
 
+    glm::mat4 viewMatrix = glm::mat4(1.0f);
+    glm::mat4 projectionMatrix;
+
     const int maxModels = 1000;
 
 public:
@@ -28,6 +34,8 @@ public:
         glClearColor(0, 0, 0, 0);
         glPolygonMode(GL_FRONT, GL_FILL);
 
+        InitializeMatrices();
+
         InitializeShaders(
             "./assets/shaders/vertShader.glsl",
             "./assets/shaders/fragShader.glsl");
@@ -35,6 +43,7 @@ public:
         currentWindow = app.GetActiveWindow();
     }
 
+    void InitializeMatrices();
     void RenderScene() const;
     void AddModel(std::string modelPath);
 
