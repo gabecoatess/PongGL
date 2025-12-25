@@ -44,13 +44,13 @@ public:
     }
 
     void InitializeMatrices();
-    void RenderScene() const;
-    void AddModel(std::string modelPath);
+    void RenderScene();
+    Model& AddModel(std::string modelPath);
 
 private:
     void CreateVertexArray();
     void InitializeShaders(const std::string& primaryVertexShaderPath, const std::string& primaryFragmentShaderPath );
-    void PassShaderData() const;
+    void RenderModel(Model& model) const;
 };
 
 #endif //RENDERER_HPP

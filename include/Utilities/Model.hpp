@@ -3,12 +3,21 @@
 
 #include <filesystem>
 #include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "../external/rapidobj/rapidobj.h"
 
 class Model {
 public:
     const std::filesystem::path modelFile;
+
+    glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec3 scale = glm::vec3(0.0f, 0.0f, 0.0f);
+
+    glm::mat4 transformMatrix = glm::mat4(1.0f);
 
 private:
     std::vector<float> modelVertices;
@@ -19,6 +28,9 @@ private:
 
     bool vertexBufferGenerated = false;
     bool elementBufferGenerated = false;
+    bool isPositionDirty = false;
+    bool isRotationDirty = false;
+    bool isScaleDirty = false;
 
     rapidobj::Result meshData;
 
@@ -58,7 +70,27 @@ public:
     GLuint GetElementBufferObject() const;
 
     void BindBuffers() const;
-    void RenderModel() const;
+    void RenderModel();
+    void UpdateTransformMatrix();
+
+    void Model::SetPosition(glm::vec3 newPosition);
+    void Model::SetPosition(float x, float y, float z);
+    void Model::SetPositionX(float x);
+    void Model::SetPositionY(float y);
+    void Model::SetPositionZ(float z);
+
+    void Model::SetRotation(glm::vec3 newRotation);
+    void Model::SetRotation(float x, float y, float z);
+    void Model::SetRotationX(float x);
+    void Model::SetRotationY(float y);
+    void Model::SetRotationZ(float z);
+
+    void Model::SetScale(glm::vec3 newScale);
+    void Model::SetScale(float x, float y, float z);
+    void Model::SetScale(float value);
+    void Model::SetScaleX(float x);
+    void Model::SetScaleY(float y);
+    void Model::SetScaleZ(float z);
 
 private:
     void GenerateBuffer(int bufferType);

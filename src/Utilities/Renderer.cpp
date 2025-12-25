@@ -1,27 +1,27 @@
 #include "Utilities/Renderer.hpp"
 
+#include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-void Renderer::RenderScene() const
+void Renderer::RenderScene()
 {
     glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(mainShader);
 
-    PassShaderData();
 
-    for (const auto& model : activeModels)
+    for (Model& model : activeModels)
     {
-        model.RenderModel();
+        RenderModel(model);
     }
 
     glfwSwapBuffers(currentWindow);
 }
 
-void Renderer::AddModel(std::string modelPath)
+Model& Renderer::AddModel(std::string modelPath)
 {
-    activeModels.emplace_back(modelPath);
+    return activeModels.emplace_back(modelPath);
 }
 
 void Renderer::CreateVertexArray()
@@ -52,9 +52,8 @@ void Renderer::InitializeShaders(const std::string& primaryVertexShaderPath, con
     // glUniformMatrix4fv(transformLocation, 1, GL_FALSE, glm::value_ptr(trans));
 }
 
-void Renderer::PassShaderData() const
+void Renderer::RenderModel(Model& model) const
 {
-    glm::mat4 modelMatrix = glm::mat4(1.0f);
-    modelMatrix = glm::rotate(modelMatrix, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-    glUniformMatrix4fv(transformLocation, 1, GL_FALSE, glm::value_ptr(projectionMatrix * viewMatrix * modelMatrix));
+    glUniformMatrix4fv(transformLocation, 1, GL_FALSE, glm::value_ptr(projectionMatrix * viewMatrix * model.transformMatrix));
+    model.RenderModel();
 }

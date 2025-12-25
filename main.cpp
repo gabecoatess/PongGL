@@ -19,11 +19,17 @@ int main()
     Renderer renderer(app);
 
     // Load meshes into renderer
-    renderer.AddModel("./assets/models/pong_title.obj");
-    renderer.AddModel("./assets/models/triangle.obj");
+    Model& pongTitleModel = renderer.AddModel("./assets/models/pong_title.obj");
+    Model& triangleModel = renderer.AddModel("./assets/models/triangle.obj");
+
+    // Set model transforms
+    triangleModel.SetScale(0.3f);
+    triangleModel.SetPositionX(-0.53f);
+    triangleModel.SetPositionY(0.4f);
 
     while (app.Active())
     {
+        triangleModel.SetRotationZ(pongTitleModel.rotation.z + 0.0005f);
         renderer.RenderScene();
         glfwPollEvents();
     }

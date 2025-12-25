@@ -2,6 +2,13 @@
 
 #include <iostream>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+#define GLM_ENABLE_EXPERIMENTAL
+#include "glm/gtx/euler_angles.hpp"
+
 int Model::GetTotalVertices() const
 {
     return modelVertices.size();
@@ -63,8 +70,10 @@ void Model::BindBuffers() const
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBuffer);
 }
 
-void Model::RenderModel() const
+void Model::RenderModel()
 {
+    UpdateTransformMatrix();
+
     BindBuffers();
     glDrawElements(GL_TRIANGLES, GetTotalIndices(), GL_UNSIGNED_INT, 0);
 }
@@ -103,4 +112,109 @@ void Model::GenerateBuffer(int bufferType)
         default:
             std::cerr << "Failed to generate buffer. No buffer type was provided!\n";
     }
+}
+
+void Model::UpdateTransformMatrix()
+{
+    if (isScaleDirty)
+    {
+        transformMatrix = glm::scale(transformMatrix, scale);
+        isScaleDirty = false;
+    }
+
+    if (isRotationDirty)
+    {
+        auto x = glm::yawPitchRoll(rotation.y, rotation.x, rotation.z);
+        transformMatrix = transformMatrix * x;
+        isRotationDirty = false;
+    }
+
+    if (isPositionDirty)
+    {
+        transformMatrix = glm::translate(transformMatrix, position);
+        isPositionDirty = false;
+    }
+}
+
+void Model::SetPosition(glm::vec3 newPosition)
+{
+    position = newPosition;
+    isPositionDirty = true;
+}
+
+void Model::SetPosition(float x, float y, float z)
+{
+    SetPosition(glm::vec3(x, y, z));
+}
+
+void Model::SetPositionX(float x)
+{
+    SetPosition(x, position.y, position.z);
+}
+
+void Model::SetPositionY(float y)
+{
+    SetPosition(position.x, y, position.z);
+}
+
+void Model::SetPositionZ(float z)
+{
+    SetPosition(position.x, position.y, z);
+}
+
+void Model::SetRotation(glm::vec3 newRotation)
+{
+    rotation = newRotation;
+    isRotationDirty = true;
+}
+
+void Model::SetRotation(float x, float y, float z)
+{
+    SetRotation(glm::vec3(x, y, z));
+}
+
+void Model::SetRotationX(float x)
+{
+    SetRotation(x, rotation.y, rotation.z);
+}
+
+void Model::SetRotationY(float y)
+{
+    SetRotation(rotation.x, y, rotation.z);
+}
+
+void Model::SetRotationZ(float z)
+{
+    SetRotation(rotation.x, rotation.y, z);
+}
+
+void Model::SetScale(glm::vec3 newScale)
+{
+    scale = newScale;
+    isScaleDirty = true;
+}
+
+void Model::SetScale(float x, float y, float z)
+{
+    SetScale(glm::vec3(x, y, z));
+}
+
+void Model::SetScale(float value)
+{
+    SetScale(glm::vec3(value, value, value));
+}
+
+void Model::SetScaleX(float x)
+{
+    SetScale(x, scale.y, scale.z);
+}
+
+void Model::SetScaleY(float y)
+{
+    SetScale(scale.x, y, scale.z);
+}
+
+void Model::SetScaleZ(float z)
+{
+    SetScale(scale.x, scale.y, z);
 }
